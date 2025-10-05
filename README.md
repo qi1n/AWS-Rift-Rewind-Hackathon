@@ -13,7 +13,7 @@ Tailwind CSS + shadcn/ui
 
 Recharts, Framer Motion
 
-Core Features
+**Core Features**
 1) Summoner’s Hall (Homepage)
 
 Input gameName#tagLine + region
@@ -59,6 +59,29 @@ One-click poster generation (tone: coach / fun / caster)
 Battle Card: head-to-head with friends
 
 Community Weekly Top Players leaderboard
+![Draft](apps/res/readmeImage/draft.png)
+# DA
+Polars + DuckDB
+
+# Backend + API
+
+Node.js
+
+DuckDB / polars (local dev) → Postgres / ClickHouse (cloud stage)
+
+FastAPI
+
+# AWS  Related
+| Service                              | Purpose                                               |
+| ------------------------------------ | ----------------------------------------------------- |
+| **S3**                               | Store raw match data & generated insights             |
+| **AWS Glue / Lambda**                | ETL pipeline from raw → Parquet features              |
+| **Athena**                           | Query and debug data quickly                          |
+| **SageMaker**                        | Train playstyle embeddings + similarity model         |
+| **Bedrock**                          | Generate personalized narratives & insights           |
+| **API Gateway + Lambda**             | Serve /summary endpoint                               |
+| **OpenSearch Serverless / pgvector** | Store playstyle embeddings for fast similarity search |
+
 
 # Key Baseline Features
 
