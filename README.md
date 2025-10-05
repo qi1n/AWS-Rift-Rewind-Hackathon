@@ -1,25 +1,66 @@
-Got it — let’s make a **Player→Pro Doppelgänger** agent that turns a year of solo-queue grind into an esports-flavored, funny-but-useful recap. Below is a concrete, buildable plan (AWS + Riot match data), the insight logic, and how to package it into fresh, shareable moments — **without** the usual “+3% win rate, try warding more” clichés.
+# Front End
+
 
 ---
 
-# Concept / 概念
+A playful yet coach-grade frontend that turns end-of-game data into reflections, learning, and celebrations.
 
-**EN:** Your agent computes a **playstyle fingerprint** from the player’s last-year matches, then matches it to **pro players** (by region or chosen region). It produces:
+Tech Stack
 
-1. A **Doppelgänger Card** (“You played most like Knight/Caps/ShowMaker this year”).
-2. A **Coachable Next Step** that is specific to the user’s fingerprint (not generic labels).
-3. **Meme-ready social panels** (rivalry posters, ‘scouting report’, ‘draft notes’) that feel like esports broadcasts.
+Next.js (App Router), TypeScript
 
-**中文：** 用玩家过去一年的比赛生成**打法指纹**，再和（本赛区或自选赛区）的**职业选手指纹**做相似度匹配。产出：
-1）**选手分身卡**（“你今年最像××职业选手”）；
-2）**针对性改进建议**（结合指纹差距，避免“贴标签”与空泛建议）；
-3）**社交海报**（解说台味儿的“球探报告/选拔笔记/对位预告”）。
+Tailwind CSS + shadcn/ui
 
----
+Recharts, Framer Motion
 
-# Key Insights (novel & fun) / 亮点洞察（新颖有梗）
+Core Features
+1) Summoner’s Hall (Homepage)
 
-**EN:**
+Input gameName#tagLine + region
+
+CTA: Generate My Career Analysis
+
+Particle effects & anime-style page transitions
+
+2) Dashboard
+
+Visualize main champions, team role & personality (e.g., Strategy Mid, Tempo Jungle)
+
+Recent performance: KDA, CS/min, GPM, Vision Score
+
+Tactical facets: Lane Tempo, Teamfights, Objective Control, Vision, Economy
+
+Team fit: Aggressive-leaning; Strategic potential: Mid-game tempo driver
+
+Recent game list
+
+3) Single Game Detail (Match Recap)
+
+Left: Timeline + map events (kills, wards, dragon/herald)
+
+Center: AI Coach voice card with key takeaways
+
+Right: What-if scenarios (e.g., swap trinket at 8:00 → higher Herald control)
+
+Bottom: 3-step improvement plan + “Coach Mode” training checklist
+
+4) Season Recap (“Book of Glory”)
+
+Narration modes: Coach (pro), Caster (playful), Bro (banter)
+
+Scrollytelling: total games, top champs, power windows, best duo
+
+Generates honor titles and poster cards (export/share)
+
+5) Share & Social
+
+One-click poster generation (tone: coach / fun / caster)
+
+Battle Card: head-to-head with friends
+
+Community Weekly Top Players leaderboard
+
+# Key Baseline Features
 
 * **Doppelgänger Match**: cosine similarity over a **playstyle embedding** (see “Modeling” below). Top-3 pros + “how/why” explanation chips.
 * **Draft Notes IRL**: If you were on stage, which champs would the enemy “ban first” vs you (your highest **threat vector** across comfort + snowball pattern).
@@ -31,21 +72,11 @@ Got it — let’s make a **Player→Pro Doppelgänger** agent that turns a year
 * **Duo Complementarity**: Which friend best “covers” your weak axes (embedding orthogonality → synergy score).
 * **Tilt Thermometer**: Detect tilt sessions via **action entropy** (erratic pathing, rising solo deaths, ping pattern). Includes **reset recipe** extracted from your own best “bounce-back” sessions.
 
-**中文：**
 
-* **最像职业选手**：基于**打法嵌入向量**的余弦相似度，给出Top3并附“像在何处”的解释。
-* **“上场即被Ban”的英雄清单**：综合熟练度与滚雪球习惯，推测你若上台对手先Ban谁。
-* **节奏&经济分**：看你**带节奏速度**（前期优势转化为塔/龙）与**回家出装纪律**。
-* **小规模搏杀DNA vs 宏观运营DNA**：战斗热区、参团人数、是否先稳住边线再开团。
-* **关键局指数**：逆风时的贡献（险胜中的输出、救险、偷龙、残局收割）。
-* **视野编排**：关注**龙/男爵前的视野时间线**与执行序列，而非纯插眼数。
-* **稳定性雷达图**：六维度稳定度。
-* **双排互补度**：朋友的强项能否覆盖你的薄弱环节。
-* **防倾轧方案**：通过**行为熵**识别“tilt”并给出你历史上有效的复位配方。
 
 ---
 
-# Data → Features → Embeddings / 数据与特征到嵌入
+# Data → Features → Embeddings
 
 **Player match features (per role/champion normalized):**
 
@@ -192,26 +223,10 @@ We always tie a suggestion to a **gap vs. the matched pro**:
 
   * ETL scripts (Glue Jobs), embedding training (SageMaker), infra IaC (SAM/CDK).
   * “Fake player” seed + unit tests for feature extraction.
+  * A Glue/Lambda **feature extractor** (Riot EoG JSON → Parquet).
+  * A SageMaker **metric-learning** notebook scaffold.
+  * A Bedrock **prompt pack** and **serverless API** skeleton.
 * **3-min video**: shows fingerprint → pro match → poster generation.
 * **Methodology write-up**: this doc distilled + ablations (e.g., with/without metric learning).
 * **AWS Services Used**: S3, Glue, Athena, Lambda, Step Functions, OpenSearch Serverless (or Aurora+pgvector), SageMaker, Bedrock (text), Polly (narration), CloudFront.
 
----
-
-# Roadmap (fast hack → polish) / 路线图
-
-**Week 1:** ETL + baseline features → PCA 128-D → simple cosine Top-1 pro → static Doppelgänger Card.
-**Week 2:** Add choreography/tempo scores + Bedrock narratives + Tilt Thermometer.
-**Week 3:** Duo complementarity + video poster + regional flavor packs.
-
----
-
-# Want a concrete starting point? / 需要落地起步代码吗？
-
-I can draft:
-
-* A Glue/Lambda **feature extractor** (Riot EoG JSON → Parquet).
-* A SageMaker **metric-learning** notebook scaffold.
-* A Bedrock **prompt pack** and **serverless API** skeleton.
-
-Say the word, and I’ll drop a minimal repo structure and code stubs you can run locally or in SageMaker immediately.
