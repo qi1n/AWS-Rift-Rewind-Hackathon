@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/721dfea4-87a0-4572-a600-ce84673e682e/console.sql" value="721dfea4-87a0-4572-a600-ce84673e682e" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/a5a1db1c-8e72-4f0a-9694-b406215256c0/console.sql" value="a5a1db1c-8e72-4f0a-9694-b406215256c0" />
+    <file url="file://$PROJECT_DIR$/init_duckdb.sql" value="a5a1db1c-8e72-4f0a-9694-b406215256c0" />
+  </component>
+</project>
